@@ -16,11 +16,24 @@ function App() {
     setPosts([...posts, newPost])
   }
 
+  // Получаем post из дочернего элемента
+  const removePost = (post) => {
+    setPosts(posts.filter(p => p.id !== post.id))
+  }
+
 
   return (
     <div className="App">
       <PostForm create={createPost}/>
-      <PostList posts={posts} title="Посты по JS"/>
+      {posts.length
+        ? 
+        <PostList remove={removePost} posts={posts} title="Посты по JS"/>
+        : 
+        <h1 style={{textAlign: 'center'}}>
+          Посты не найдены!
+        </h1>
+      }
+      
     </div>
   );
 }
