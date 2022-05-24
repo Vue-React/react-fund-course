@@ -13,7 +13,3 @@ root.render(
 //   <App/>,
 //   document.getElementById('root')
 // );
-
-
-// 22.05.22
-// timecode: 1:05:37
