@@ -1,21 +1,49 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from "react-router-dom";
 // Routes вместо Switch
 // Navigate вместо Redirect
-import About from '../pages/About';
-import Posts from '../pages/Posts';
-import Error from '../pages/Error';
-import PostIdPage from '../pages/PostIdPage';
+import { AuthContext } from '../context';
+import { publicRoutes, privateRoutes } from '../router/';
+import Loader from './UI/loader/Loader';
 
 const AppRouter = () => {
+    const {isAuth, isLoading} = useContext(AuthContext)
+    // console.log('isAuth: ', isAuth);
+
+    if(isLoading){
+        return <Loader/>
+    }
+
     return (
-        <Routes>
-            <Route path='/about' element={<About/>} />
-            <Route exact path='/posts' element={<Posts/>} />
-            <Route exact path='/posts/:id' element={<PostIdPage/>} />
-            <Route path='/error' element={<Error/>} />
-            <Route path="*" element={<Navigate to="/error" />} />
-        </Routes>
+        isAuth
+            ?
+            <Routes>
+                {privateRoutes.map(route =>
+                    <Route
+                        element={<route.component/>}
+                        path={route.path}
+                        exact={route.exect}
+                        // element вместо component
+                        key={route.path}
+                    />
+                )}
+                <Route path="*" element={<Navigate to="/posts" />} />
+            </Routes>
+            :
+            <Routes>
+                {publicRoutes.map(route =>
+                    <Route
+                        element={<route.component/>}
+                        path={route.path}
+                        exact={route.exect}
+                        // element вместо component
+                        key={route.path}
+                    />
+                )}
+                <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
+
+
     )
 }
 
